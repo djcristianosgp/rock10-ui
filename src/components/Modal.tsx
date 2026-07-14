@@ -9,9 +9,10 @@ export interface ModalProps {
   children: ReactNode;
   footer?: ReactNode;
   size?: 'sm' | 'md' | 'lg' | 'xl';
+  closeOnOutsideClick?: boolean;
 }
 
-export function Modal({ isOpen, onClose, title, children, footer, size = 'md' }: ModalProps) {
+export function Modal({ isOpen, onClose, title, children, footer, size = 'md', closeOnOutsideClick = false }: ModalProps) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -34,7 +35,7 @@ export function Modal({ isOpen, onClose, title, children, footer, size = 'md' }:
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-[fadeIn_0.2s_ease-out]">
-      <div className="fixed inset-0" onClick={onClose} />
+      <div className="fixed inset-0" onClick={closeOnOutsideClick ? onClose : undefined} />
       <div
         className={cn(
           "relative w-full bg-white dark:bg-dark-surface border border-gray-150 dark:border-dark-border rounded-xl shadow-xl overflow-hidden flex flex-col max-h-[90vh] z-10 animate-[slideUp_0.2s_ease-out]",
