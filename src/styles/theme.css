@@ -1,0 +1,33 @@
+/* rock10-ui theme styles */
+@import "tailwindcss";
+
+@theme {
+  --color-primary-50: #E6F7F1;
+  --color-primary-100: #B3E8D5;
+  --color-primary-200: #80D9B9;
+  --color-primary-300: #4DCA9D;
+  --color-primary-400: #1AB781;
+  --color-primary-500: #0EA571;
+  --color-primary-600: #0B8359;
+  --color-primary-700: #086141;
+  --color-primary-800: #053F29;
+  --color-primary-900: #021D11;
+
+  --color-secondary-50: #FFF0EB;
+  --color-secondary-100: #FFD4C7;
+  --color-secondary-200: #FFB8A3;
+  --color-secondary-300: #FF9C7F;
+  --color-secondary-400: #FF845B;
+  --color-secondary-500: #FF6B35;
+  --color-secondary-600: #E05020;
+  --color-secondary-700: #A63B18;
+  --color-secondary-800: #6D2710;
+  --color-secondary-900: #331208;
+
+  --color-dark-bg: #0F1419;
+  --color-dark-surface: #1A202C;
+  --color-dark-surface-light: #2D3748;
+  --color-dark-border: #2D3748;
+  --color-dark-text: #E2E8F0;
+  --color-dark-text-muted: #A0AEC0;
+}
