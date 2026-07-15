@@ -1,5 +1,5 @@
-/* rock10-ui theme styles */
-@import "tailwindcss";
+@import "tailwindcss/theme.css";
+@import "tailwindcss/utilities.css";
 
 @theme {
   --color-primary-50: #E6F7F1;
