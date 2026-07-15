@@ -96,3 +96,42 @@ npm publish --access public
 # 4. Envia para o Git remoto
 git push origin main --follow-tags
 ```
+
+---
+
+## Recursos Adicionais Adicionados ao Projeto
+
+### 🧪 Testes Unitários e de Integração
+Antes de publicar uma nova versão, garanta que todos os testes estejam passando com sucesso:
+```bash
+npm run test
+```
+* **Vitest** é usado tanto para os testes unitários baseados no DOM (`jsdom`) quanto para testes de visualização em navegador real headless (`Playwright` + `Storybook`).
+
+### 📓 Storybook (Documentação Viva)
+Para rodar localmente o ambiente isolado de desenvolvimento dos componentes e documentação:
+```bash
+npm run storybook
+```
+Para exportar a versão estática do Storybook (ex: para deploy na web):
+```bash
+npm run build-storybook
+```
+
+### 🦋 Releases Controlados com Changesets
+Configuramos o **Changesets** para gerenciar bumps de versão e geração de Changelogs automática.
+
+1. **Ao criar uma alteração ou nova funcionalidade, adicione um changeset:**
+   ```bash
+   npx changeset
+   ```
+   * Siga as instruções no prompt para selecionar o tipo de alteração (major/minor/patch) e escrever a nota do changelog.
+   * Faça o commit do arquivo `.changeset/xxxx.md` gerado junto com seu código.
+
+2. **Ao preparar a release/publicação:**
+   ```bash
+   npx changeset version
+   ```
+   * Isso consumirá os arquivos do changeset, fará o bump das versões corretas no `package.json` e gerará/atualizará o arquivo `CHANGELOG.md` automaticamente.
+   * Depois disso, basta rodar `npm run build` e publicar!
+
