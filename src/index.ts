@@ -12,6 +12,7 @@ export { DatePicker, type DatePickerProps } from './components/DatePicker';
 export { DateSelector, type DateSelectorProps } from './components/DateSelector';
 export { LikeButton, type LikeButtonProps } from './components/LikeButton';
 export { DownloadButton, type DownloadButtonProps } from './components/DownloadButton';
+export { Tabs, type TabsProps, type TabItem } from './components/Tabs';
 
 // Export styles
 import './styles/theme.css';
