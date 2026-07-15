@@ -55,6 +55,9 @@ Você deve incrementar a versão no [package.json](file:///c:/AtualDev/Prototipo
   ```
 
 > O comando `npm version` altera automaticamente o `package.json`, cria um commit de versão e uma tag git local correspondente.
+>
+> [!IMPORTANT]
+> O comando `npm version` cria a tag **apenas localmente**. Ela **não** será enviada para o GitHub automaticamente. É essencial executar o **Passo 4** (`git push origin main --follow-tags`) ao final para que a nova tag e os commits apareçam no repositório remoto.
 
 ### 2. Executar o Build de Produção
 
