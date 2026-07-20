@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Heart } from 'lucide-react';
 import { cn } from '../utils/cn';
 
 export interface LikeButtonProps {
@@ -14,6 +15,8 @@ export interface LikeButtonProps {
   iconOnly?: boolean;
   /** Se true, desabilita o botão */
   disabled?: boolean;
+  /** Se true, utiliza ícones do Lucide (Heart) ao invés de emoji */
+  useLucide?: boolean;
 }
 
 export const LikeButton = ({
@@ -23,6 +26,7 @@ export const LikeButton = ({
   size = 'md',
   iconOnly = false,
   disabled = false,
+  useLucide = true,
 }: LikeButtonProps): JSX.Element => {
   const [likes, setLikes] = useState(initialLikes);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -63,6 +67,12 @@ export const LikeButton = ({
     lg: "text-xl"
   };
 
+  const lucideIconSizes = {
+    sm: 16,
+    md: 20,
+    lg: 24
+  };
+
   const countSizes = {
     sm: "min-w-[16px] h-4 text-[10px] px-1",
     md: "min-w-[20px] h-5 text-xs px-1.5",
@@ -83,14 +93,34 @@ export const LikeButton = ({
       aria-pressed={true}
     >
       <span className="relative flex items-center justify-center leading-none flex-shrink-0">
-        <span className={cn("flex items-center justify-center transition-transform duration-150", isAnimating && "animate-iconPop")}>
-          ❤️
-        </span>
+        {useLucide ? (
+          <Heart
+            className={cn(
+              "fill-rose-500 text-rose-500 transition-transform duration-150",
+              isAnimating && "animate-iconPop"
+            )}
+            size={lucideIconSizes[size]}
+          />
+        ) : (
+          <span className={cn("flex items-center justify-center transition-transform duration-150", isAnimating && "animate-iconPop")}>
+            ❤️
+          </span>
+        )}
         {isAnimating && (
           <>
-            <span className={cn("absolute text-sm pointer-events-none opacity-0 animate-heartFloat1", iconSizes[size])}>❤️</span>
-            <span className={cn("absolute text-sm pointer-events-none opacity-0 animate-heartFloat2", iconSizes[size])}>❤️</span>
-            <span className={cn("absolute text-sm pointer-events-none opacity-0 animate-heartFloat3", iconSizes[size])}>❤️</span>
+            {useLucide ? (
+              <>
+                <Heart className="absolute pointer-events-none opacity-0 animate-heartFloat1 fill-rose-500 text-rose-500" size={lucideIconSizes[size] - 4} />
+                <Heart className="absolute pointer-events-none opacity-0 animate-heartFloat2 fill-rose-500 text-rose-500" size={lucideIconSizes[size] - 4} />
+                <Heart className="absolute pointer-events-none opacity-0 animate-heartFloat3 fill-rose-500 text-rose-500" size={lucideIconSizes[size] - 4} />
+              </>
+            ) : (
+              <>
+                <span className={cn("absolute text-sm pointer-events-none opacity-0 animate-heartFloat1", iconSizes[size])}>❤️</span>
+                <span className={cn("absolute text-sm pointer-events-none opacity-0 animate-heartFloat2", iconSizes[size])}>❤️</span>
+                <span className={cn("absolute text-sm pointer-events-none opacity-0 animate-heartFloat3", iconSizes[size])}>❤️</span>
+              </>
+            )}
           </>
         )}
       </span>

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, ReactNode } from 'react';
+import { Download, Loader2, Check, X } from 'lucide-react';
 import { cn } from '../utils/cn';
 
 type DownloadState = 'idle' | 'downloading' | 'success' | 'error';
@@ -22,6 +23,8 @@ export interface DownloadButtonProps {
   size?: 'sm' | 'md' | 'lg';
   /** Se true, mostra apenas o ícone */
   iconOnly?: boolean;
+  /** Se true, utiliza ícones do Lucide (Download, Loader2, Check, X) ao invés de emoji */
+  useLucide?: boolean;
 }
 
 export const DownloadButton = ({
@@ -34,6 +37,7 @@ export const DownloadButton = ({
   onError,
   size = 'md',
   iconOnly = false,
+  useLucide = true,
 }: DownloadButtonProps): JSX.Element => {
   const [state, setState] = useState<DownloadState>('idle');
   const [progress, setProgress] = useState(0);
@@ -119,7 +123,26 @@ export const DownloadButton = ({
     }
   };
 
-  const getIcon = (): string => {
+  const lucideIconSizes = {
+    sm: 16,
+    md: 20,
+    lg: 24
+  };
+
+  const getIcon = (): ReactNode => {
+    if (useLucide) {
+      switch (state) {
+        case 'downloading':
+          return <Loader2 className="animate-spin text-primary-500" size={lucideIconSizes[size]} />;
+        case 'success':
+          return <Check className="text-green-600 dark:text-green-400" size={lucideIconSizes[size]} />;
+        case 'error':
+          return <X className="text-red-600 dark:text-red-400" size={lucideIconSizes[size]} />;
+        default:
+          return <Download className="text-gray-600 dark:text-dark-text-muted group-hover:text-primary-500 transition-colors" size={lucideIconSizes[size]} />;
+      }
+    }
+
     switch (state) {
       case 'downloading':
         return '⏳';
