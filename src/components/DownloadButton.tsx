@@ -5,6 +5,8 @@ import { cn } from '../utils/cn';
 type DownloadState = 'idle' | 'downloading' | 'success' | 'error';
 
 export interface DownloadButtonProps {
+  /** ID do vídeo opcional */
+  videoId?: number;
   /** URL do vídeo para download */
   videoUrl: string;
   /** Nome do arquivo para download */
