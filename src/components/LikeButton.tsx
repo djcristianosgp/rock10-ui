@@ -3,10 +3,12 @@ import { Heart } from 'lucide-react';
 import { cn } from '../utils/cn';
 
 export interface LikeButtonProps {
+  /** ID do vídeo opcional */
+  videoId?: number;
   /** Número inicial de curtidas */
   initialLikes?: number;
-  /** Função assíncrona chamada para registrar a curtida e retornar a nova contagem */
-  onLike: () => Promise<number>;
+  /** Função assíncrona opcional chamada para registrar a curtida e retornar a nova contagem */
+  onLike?: () => Promise<number>;
   /** Callback opcional chamado quando o like muda localmente */
   onLikeChange?: (newCount: number) => void;
   /** Tamanho do botão */
@@ -39,53 +41,57 @@ export const LikeButton = ({
     setLikes(optimisticCount);
     onLikeChange?.(optimisticCount);
 
-    try {
-      const serverCount = await onLike();
-      setLikes(serverCount);
-      if (serverCount !== optimisticCount) {
-        onLikeChange?.(serverCount);
+    if (onLike) {
+      try {
+        const serverCount = await onLike();
+        setLikes(serverCount);
+        if (serverCount !== optimisticCount) {
+          onLikeChange?.(serverCount);
+        }
+      } catch {
+        // Reverte em caso de erro
+        setLikes(likes);
+        onLikeChange?.(likes);
+      } finally {
+        setTimeout(() => setIsAnimating(false), 600);
       }
-    } catch {
-      // Reverte em caso de erro
-      setLikes(likes);
-      onLikeChange?.(likes);
-    } finally {
+    } else {
       setTimeout(() => setIsAnimating(false), 600);
     }
   };
 
   // Size mapping
   const sizeClasses = {
-    sm: "px-2 py-1 text-sm min-h-[32px]",
-    md: "px-3 py-2 text-base min-h-[40px] sm:min-h-[44px]", // thumb-friendly min height on mobile
-    lg: "px-4 py-3 text-lg min-h-[48px] sm:min-h-[52px]"
+    sm: 'px-2 py-1 text-sm min-h-[32px]',
+    md: 'px-3 py-2 text-base min-h-[40px] sm:min-h-[44px]',
+    lg: 'px-4 py-3 text-lg min-h-[48px] sm:min-h-[52px]',
   };
 
   const iconSizes = {
-    sm: "text-base",
-    md: "text-lg",
-    lg: "text-xl"
+    sm: 'text-base',
+    md: 'text-lg',
+    lg: 'text-xl',
   };
 
   const lucideIconSizes = {
     sm: 16,
     md: 20,
-    lg: 24
+    lg: 24,
   };
 
   const countSizes = {
-    sm: "min-w-[16px] h-4 text-[10px] px-1",
-    md: "min-w-[20px] h-5 text-xs px-1.5",
-    lg: "min-w-[22px] h-[22px] text-xs px-2"
+    sm: 'min-w-[16px] h-4 text-[10px] px-1',
+    md: 'min-w-[20px] h-5 text-xs px-1.5',
+    lg: 'min-w-[22px] h-[22px] text-xs px-2',
   };
 
   return (
     <button
       className={cn(
-        "relative inline-flex items-center justify-center gap-2 font-semibold cursor-pointer transition-all duration-200 select-none rounded-lg border focus-visible:ring-3 focus-visible:ring-primary-300 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed",
-        "bg-primary-50 border-primary-300 text-primary-700 hover:bg-primary-100 hover:border-primary-400 active:scale-95",
+        'relative inline-flex items-center justify-center gap-2 font-semibold cursor-pointer transition-all duration-200 select-none rounded-lg border focus-visible:ring-3 focus-visible:ring-primary-300 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed',
+        'bg-primary-50 border-primary-300 text-primary-700 hover:bg-primary-100 hover:border-primary-400 active:scale-95',
         sizeClasses[size],
-        isAnimating && "animate-heartBeat"
+        isAnimating && 'animate-heartBeat'
       )}
       onClick={handleLike}
       disabled={disabled}
@@ -96,13 +102,18 @@ export const LikeButton = ({
         {useLucide ? (
           <Heart
             className={cn(
-              "fill-rose-500 text-rose-500 transition-transform duration-150",
-              isAnimating && "animate-iconPop"
+              'fill-rose-500 text-rose-500 transition-transform duration-150',
+              isAnimating && 'animate-iconPop'
             )}
             size={lucideIconSizes[size]}
           />
         ) : (
-          <span className={cn("flex items-center justify-center transition-transform duration-150", isAnimating && "animate-iconPop")}>
+          <span
+            className={cn(
+              'flex items-center justify-center transition-transform duration-150',
+              isAnimating && 'animate-iconPop'
+            )}
+          >
             ❤️
           </span>
         )}
@@ -110,15 +121,45 @@ export const LikeButton = ({
           <>
             {useLucide ? (
               <>
-                <Heart className="absolute pointer-events-none opacity-0 animate-heartFloat1 fill-rose-500 text-rose-500" size={lucideIconSizes[size] - 4} />
-                <Heart className="absolute pointer-events-none opacity-0 animate-heartFloat2 fill-rose-500 text-rose-500" size={lucideIconSizes[size] - 4} />
-                <Heart className="absolute pointer-events-none opacity-0 animate-heartFloat3 fill-rose-500 text-rose-500" size={lucideIconSizes[size] - 4} />
+                <Heart
+                  className="absolute pointer-events-none opacity-0 animate-heartFloat1 fill-rose-500 text-rose-500"
+                  size={lucideIconSizes[size] - 4}
+                />
+                <Heart
+                  className="absolute pointer-events-none opacity-0 animate-heartFloat2 fill-rose-500 text-rose-500"
+                  size={lucideIconSizes[size] - 4}
+                />
+                <Heart
+                  className="absolute pointer-events-none opacity-0 animate-heartFloat3 fill-rose-500 text-rose-500"
+                  size={lucideIconSizes[size] - 4}
+                />
               </>
             ) : (
               <>
-                <span className={cn("absolute text-sm pointer-events-none opacity-0 animate-heartFloat1", iconSizes[size])}>❤️</span>
-                <span className={cn("absolute text-sm pointer-events-none opacity-0 animate-heartFloat2", iconSizes[size])}>❤️</span>
-                <span className={cn("absolute text-sm pointer-events-none opacity-0 animate-heartFloat3", iconSizes[size])}>❤️</span>
+                <span
+                  className={cn(
+                    'absolute text-sm pointer-events-none opacity-0 animate-heartFloat1',
+                    iconSizes[size]
+                  )}
+                >
+                  ❤️
+                </span>
+                <span
+                  className={cn(
+                    'absolute text-sm pointer-events-none opacity-0 animate-heartFloat2',
+                    iconSizes[size]
+                  )}
+                >
+                  ❤️
+                </span>
+                <span
+                  className={cn(
+                    'absolute text-sm pointer-events-none opacity-0 animate-heartFloat3',
+                    iconSizes[size]
+                  )}
+                >
+                  ❤️
+                </span>
               </>
             )}
           </>
@@ -129,10 +170,12 @@ export const LikeButton = ({
         <span className="flex items-center gap-1.5">
           <span className="whitespace-nowrap">Curtido</span>
           {likes > 0 && (
-            <span className={cn(
-              "inline-flex items-center justify-center rounded-full bg-primary-600 text-white font-bold transition-all duration-150 animate-countBounce",
-              countSizes[size]
-            )}>
+            <span
+              className={cn(
+                'inline-flex items-center justify-center rounded-full bg-primary-600 text-white font-bold transition-all duration-150 animate-countBounce',
+                countSizes[size]
+              )}
+            >
               {likes}
             </span>
           )}
