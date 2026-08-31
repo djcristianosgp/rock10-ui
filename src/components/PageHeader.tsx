@@ -3,7 +3,7 @@ import { cn } from '../utils/cn';
 
 export interface PageHeaderProps {
   title: string;
-  description?: string;
+  description?: ReactNode;
   badge?: ReactNode;
   actions?: ReactNode;
   breadcrumb?: ReactNode;
@@ -34,9 +34,9 @@ export function PageHeader({
           {badge && <div>{badge}</div>}
         </div>
         {description && (
-          <p className="text-sm text-gray-500 dark:text-dark-text-muted mt-0.5 font-medium">
+          <div className="text-sm text-gray-500 dark:text-dark-text-muted mt-0.5 font-medium">
             {description}
-          </p>
+          </div>
         )}
       </div>
 
