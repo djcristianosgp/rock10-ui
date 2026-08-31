@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { AlertTriangle } from 'lucide-react';
 import { Modal } from './Modal';
 
@@ -6,7 +7,7 @@ export interface ConfirmDialogProps {
   onClose: () => void;
   onConfirm: () => void;
   title: string;
-  message: string;
+  message: ReactNode;
   confirmText?: string;
   cancelText?: string;
   isLoading?: boolean;
@@ -30,32 +31,33 @@ export function ConfirmDialog({
       size="sm"
       footer={
         <>
-          <button 
-            className="px-4 py-2 text-sm font-semibold text-gray-700 dark:text-dark-text bg-gray-100 hover:bg-gray-200 dark:bg-dark-surface-light dark:hover:bg-gray-700 rounded-lg transition-all disabled:opacity-50 cursor-pointer" 
-            onClick={onClose} 
+          <button
+            type="button"
+            onClick={onClose}
             disabled={isLoading}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-dark-surface dark:text-dark-text dark:border-dark-border dark:hover:bg-dark-surface-light cursor-pointer"
           >
             {cancelText}
           </button>
-          <button 
-            className="px-4 py-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 active:scale-[0.98] rounded-lg shadow-sm transition-all disabled:opacity-50 cursor-pointer" 
-            onClick={onConfirm} 
+          <button
+            type="button"
+            onClick={onConfirm}
             disabled={isLoading}
+            className="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 cursor-pointer"
           >
+            {isLoading && (
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            )}
             {isLoading ? 'Aguarde...' : confirmText}
           </button>
         </>
       }
     >
-      <div className="flex gap-4 items-start">
-        <div className="p-2.5 bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 rounded-xl">
-          <AlertTriangle className="w-6 h-6 flex-shrink-0" />
+      <div className="flex items-start gap-4">
+        <div className="flex-shrink-0 w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-red-600 dark:text-red-400">
+          <AlertTriangle className="w-5 h-5" />
         </div>
-        <div>
-          <p className="text-gray-600 dark:text-dark-text-muted mt-1 leading-relaxed">
-            {message}
-          </p>
-        </div>
+        <div className="flex-1 text-sm text-gray-600 dark:text-dark-text-muted">{message}</div>
       </div>
     </Modal>
   );
